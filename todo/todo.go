@@ -1,6 +1,11 @@
-package todo
+package main
 
-import "time"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"time"
+)
 
 type item struct {
 	Task        string
@@ -11,6 +16,14 @@ type item struct {
 
 type List []item
 
+func main() {
+	t := List{}
+	t.Add("new task")
+	t.Add("new task 2")
+	t.Complete(2)
+	t.Save("adam.json")
+}
+
 func (l *List) Add(task string) {
 	t := item{
 		Task:        task,
@@ -20,4 +33,32 @@ func (l *List) Add(task string) {
 	}
 
 	*l = append(*l, t)
+}
+
+func (l *List) Complete(i int) error {
+	ls := *l
+	if i < 0 || i > len(ls) {
+		return fmt.Errorf("the item with index: %d does not exist", i)
+	}
+	ls[i-1].Done = true
+	ls[i-1].CompletedAt = time.Now()
+
+	return nil
+}
+
+func (l *List) Delete(i int) error {
+	ls := *l
+	if i < 0 || i > len(ls) {
+		return fmt.Errorf("the item with index: %d does not exist", i)
+	}
+	ls = append(ls[:i], ls[i+1:]...)
+	return nil
+}
+
+func (l *List) Save(filename string) error {
+	js, err := json.Marshal(l)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filename, js, 0644)
 }
