@@ -1,4 +1,4 @@
-package main
+package todo
 
 import (
 	"encoding/json"
@@ -15,14 +15,6 @@ type item struct {
 }
 
 type List []item
-
-func main() {
-	t := List{}
-	t.Add("new task")
-	t.Add("new task 2")
-	t.Complete(2)
-	t.Save("adam.json")
-}
 
 func (l *List) Add(task string) {
 	t := item{
@@ -61,4 +53,15 @@ func (l *List) Save(filename string) error {
 		return err
 	}
 	return os.WriteFile(filename, js, 0644)
+}
+
+func (l *List) Get(filename string) error {
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+	if len(file) == 0 {
+		return nil
+	}
+	return json.Unmarshal(file, l)
 }
