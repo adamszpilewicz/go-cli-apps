@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"todo"
@@ -24,6 +25,7 @@ func main() {
 		}
 	default:
 		item := strings.Join(os.Args[1:], " ")
+		log.Println(item)
 		l.Add(item)
 
 		if err := l.Save(toDoName); err != nil {
