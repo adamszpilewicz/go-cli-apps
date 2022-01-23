@@ -27,6 +27,21 @@ func (l *List) Add(task string) {
 	*l = append(*l, t)
 }
 
+func (l *List) String() string {
+	formatted := ""
+
+	for k, t := range *l {
+		prefix := " "
+		if t.Done {
+			prefix = "[X] "
+		} else {
+			prefix = "[ ] "
+		}
+		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+	}
+	return formatted
+}
+
 func (l *List) Complete(i int) error {
 	ls := *l
 	if i < 0 || i > len(ls) {

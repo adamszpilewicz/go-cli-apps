@@ -1,0 +1,6 @@
+goos: darwin
+goarch: arm64
+pkg: colStats
+BenchmarkRun-8   	      10	  70117083 ns/op	215021402 B/op	 2529298 allocs/op
+PASS
+ok  	colStats	1.164s
